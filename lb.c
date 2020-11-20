@@ -33,7 +33,9 @@
 void err_exit(char *reason) {
     fprintf(stderr, "%s: %s\n", reason, strerror(errno));
     exit(1);
-} void err_exit_child(char *reason) {
+}
+
+void err_exit_child(char *reason) {
     fprintf(stderr, "%s: %s\n", reason, strerror(errno));
     _exit(1);
 }

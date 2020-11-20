@@ -6,7 +6,7 @@ A program that launches two other programs in order. I use it to run [BCC tools]
 
 The first program gets launched with `fork()`. After `fork()` returns, the child process performs a blocking read on a pipe created by the parent.
 
-The second program also gets launched with `fork()`, except it immediately calls `exec()`. The parent process sleeps for a second and then sends data on a pipe to the first process. Once the first process reads data from the pipe, it calls `exec()`.
+The second program also gets launched with `fork()` and immediately calls `exec()`. The parent process sleeps for 5 seconds and then sends data on a pipe to the first process. Once the first process reads data from the pipe, it calls `exec()`.
 
 The parent waits for its children. After the first child exits, the parent will send a signal (currently `SIGINT`) to the second process to kill that one.
 
@@ -17,6 +17,16 @@ Make sure you have `gcc` and `make` installed. Then run:
 ```
 $ make
 ```
+
+### Alternatives
+
+If you use `bpftrace`, you can just filter by `comm` (process name) and launch your program in another window.
+
+```
+$ sudo bpftrace -e 'kprobe:vfs_read /comm=="ls"/ { printf("vs_read called from %d\n", pid); }'
+```
+
+Sometimes programs will offer a `-n` where you can filter by process name.
 
 ### Using
 
